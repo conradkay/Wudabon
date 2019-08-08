@@ -1,0 +1,18 @@
+{
+  schema: {
+    files: 'server/src/graphql/**/*.graphql'
+  },
+  query: {
+     files: [
+       {
+         match: 'client/src/**/*.{graphql,gql}',
+         parser: 'QueryParser'
+       },
+        {
+        match: 'client/src/**/*.{ts,tsx}',
+        parser: ['EmbeddedQueryParser', { startTag: 'gql`', endTag: '`' }],
+        isRelay: false,
+      },
+     ]
+   }
+}

@@ -1,0 +1,173 @@
+scalar Date
+
+type Query {
+  projects(ids: [String!]!): [Project]!
+  projectById(id: String!): Project
+  user(id: String!): User
+}
+
+type Subtask {
+  name: String!
+  completed: Boolean!
+  id: String!
+}
+
+type Comment {
+  comment: String!
+  dateAdded: Date! # date string
+  lastEdited: Date # optional date string
+  id: String!
+}
+
+type TaskSecurity {
+  public: Boolean!
+  assignedUsers: [String!]!
+}
+
+type TaskRecurrance {
+  interval: Int!
+  nextDue: Date!
+}
+
+type Task {
+  security: TaskSecurity!
+
+  progress: Int!
+
+  id: String!
+  name: String!
+  points: Int!
+  timeWorkedOn: Int!
+  color: String!
+  dueDate: Date
+  startDate: Date
+  comments: [Comment!]!
+  subTasks: [Subtask!]!
+  recurrance: TaskRecurrance
+}
+
+type User {
+  id: String!
+  profileImg: String
+  username: String!
+  email: String!
+  projects: [Project!]!
+}
+
+type Profile {
+  id: String!
+  profileImg: String
+  username: String!
+  email: String!
+  projects: [String!]!
+}
+
+type Project {
+  ownerId: String!
+  name: String!
+  id: String!
+  lists: [List!]!
+  users: [String!]! # if null is a private project
+  tasks: [Task!]!
+  isPrivate: Boolean! # defaults to false (public)
+}
+
+type List {
+  taskIds: [String!]!
+  name: String!
+  id: String!
+}
+
+input TaskInput {
+  name: String
+  points: Int
+  dueDate: Date # date string
+  recurrance: String # daily | weekly | none
+  color: String # hex
+}
+
+input ProjectInput {
+  name: String!
+}
+
+input ListInput {
+  taskIds: [String!]
+  name: String
+}
+
+type Auth {
+  user: User!
+}
+
+type Void {
+  message: String!
+}
+
+type DeleteReturn {
+  id: String!
+}
+
+type TaskMerge {
+  project: Project!
+  task: Task
+}
+
+type ListMerge {
+  project: Project!
+  list: List
+}
+
+input ListInfo {
+  name: String
+  completed: Boolean
+}
+
+input SubtaskInfo {
+  name: String!
+  completed: Boolean!
+}
+
+type Mutation {
+  createTask(projId: String!, taskInfo: TaskInput!, listId: String!): TaskMerge!
+  editTask(projId: String!, task: TaskInput!, taskId: String!): TaskMerge!
+  deleteTask(projId: String!, id: String!): TaskMerge!
+  dragTask(
+    oldListId: String!
+    newListId: String!
+    newIndex: Int!
+    id: String!
+    newProgress: Int!
+    projectId: String!
+  ): TaskMerge!
+
+  # should these even be here?
+  register(username: String!, password: String!, email: String!): Auth!
+  login(email: String!, password: String!): Auth!
+  loginWithCookie: Auth!
+  logout: Void!
+
+  createProject(name: String!): Project!
+  editProject(id: String!, newProj: ProjectInput!): Project!
+  deleteProject(id: String!): DeleteReturn! # sends deleted project id back
+  joinProject(projectId: String!): Project!
+  leaveProject(projectId: String!): DeleteReturn!
+
+  createList(projId: String!, name: String!): ListMerge!
+  editList(listId: String!, projId: String!, newList: ListInput!): ListMerge!
+  deleteList(projId: String!, id: String!): DeleteReturn!
+
+  removeMemberFromProject(projectId: String!, userId: String!): Project!
+
+  setComment(
+    projId: String!
+    taskId: String!
+    commentId: String!
+    description: String
+  ): Task!
+  setSubtask(
+    projId: String!
+    taskId: String!
+    subtaskId: String!
+    info: SubtaskInfo
+  ): Task!
+}

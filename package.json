@@ -1,0 +1,36 @@
+{
+  "name": "kanbanbrawn-master",
+  "version": "1.0.0",
+  "description": "Bugs: Editing a created task to have more points doesn't increase your current points Proposals:",
+  "main": "./server/src/index.ts",
+  "scripts": {
+    "dev": "concurrently --kill-others \"cd server && npm start\" \"cd client && npm start\"",
+    "server": "cd server && nodemon",
+    "start": "cd server && npm i && nodemon",
+    "postinstall": "npm i --prefix server && npm run build --prefix client"
+  },
+  "engines": {
+    "node": "10.16.1",
+    "npm": "6.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/conradkay/KanbanBrawn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/conradkay/KanbanBrawn/issues"
+  },
+  "homepage": "https://mantella.herokuapp.com",
+  "dependencies": {
+    "@playlyfe/gql": "^2.6.1",
+    "@types/node": "^12.6.9",
+    "apollo": "^2.15.0",
+    "concurrently": "^4.1.0",
+    "copyfiles": "^2.1.0",
+    "nodemon": "^1.19.1",
+    "react-scripts": "^2.1.8",
+    "typescript": "^3.5.3"
+  }
+}
