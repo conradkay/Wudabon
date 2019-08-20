@@ -4,10 +4,12 @@
   "description": "Bugs: Editing a created task to have more points doesn't increase your current points Proposals:",
   "main": "./server/src/index.ts",
   "scripts": {
-    "dev": "concurrently --kill-others \"cd server && npm start\" \"cd client && npm start\"",
-    "server": "cd server && nodemon",
     "start": "cd server && npm i && nodemon",
-    "postinstall": "npm i --prefix server && npm run build --prefix client"
+    "server": "npm start --prefix server",
+    "build": "npm i --prefix server && cd client && npm install && npm run build",
+    "client": "npm start --prefix client",
+    "gen": "npm run graphql-gen --prefix server && npm run graphql-gen --prefix client",
+    "git-fix": "find .git/objects/ -type f -empty | xargs rm && git fetch -p && git fsck --full"
   },
   "engines": {
     "node": "10.16.1",
@@ -22,11 +24,10 @@
   "bugs": {
     "url": "https://github.com/conradkay/KanbanBrawn/issues"
   },
-  "homepage": "https://mantella.herokuapp.com",
+  "homepage": "https://phillibo.herokuapp.com",
   "dependencies": {
     "@playlyfe/gql": "^2.6.1",
     "@types/node": "^12.6.9",
-    "apollo": "^2.15.0",
     "concurrently": "^4.1.0",
     "copyfiles": "^2.1.0",
     "nodemon": "^1.19.1",

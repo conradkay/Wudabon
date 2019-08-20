@@ -20,7 +20,7 @@ export const gqlServer = new ApolloServer({
   typeDefs,
   resolvers,
   engine: {
-    apiKey: 'service:mantella:Ylb-gXcuSHCbWhBHn_Oa_A'
+    apiKey: 'service:philibo:oxQyejXmwyrnNZl7HPgzLQ'
   },
   tracing: true,
   context: async ({ req, res }) => {
@@ -35,5 +35,5 @@ export const gqlServer = new ApolloServer({
 
       return { req, res, user: null }
     }
-  }
+  },
 })

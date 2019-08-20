@@ -1,6 +1,6 @@
 {
   "projects": {
-    "mantella": {
+    "philibo": {
       "schemaPath": "./server/src/graphql/schema.graphql",
       "includes": ["**/*.{graphql,ts,tsx}"],
       "extensions": {

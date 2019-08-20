@@ -58,6 +58,7 @@ const login: MutationResolvers['login'] = async (parent, obj, context) => {
     }
     throw new AuthenticationError('Incorrect Password')
   }
+  console.log('user in db does not exist')
   throw new AuthenticationError('User with Email does not exist!')
 }
 
