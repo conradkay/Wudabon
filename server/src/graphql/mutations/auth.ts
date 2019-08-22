@@ -1,9 +1,7 @@
-import { UserProps, comparePassword } from './../../models/User'
+import { UserProps, comparePassword } from '../../models/User'
 import bcrypt from 'bcryptjs'
 import { MutationResolvers } from '../../graphql/types'
 import { UserModel } from '../../models/User'
-import { ProjectModel } from '../../models/Project'
-import { taskObjects, projectData } from '../../data'
 import jsonwebtoken from 'jsonwebtoken'
 import { AuthenticationError } from 'apollo-server-core'
 import uuid from 'uuid'
@@ -25,12 +23,9 @@ const loginWithCookie: MutationResolvers['loginWithCookie'] = async (
     throw new AuthenticationError('Token Corrupt!')
   }
 
-  const projects = await ProjectModel.find({ id: user.projects })
-
   return {
     user: {
-      ...(user as any).toObject(),
-      projects: projects.map((proj) => proj.toObject())
+      ...(user as any).toObject()
     }
   }
 }
@@ -47,12 +42,9 @@ const login: MutationResolvers['login'] = async (parent, obj, context) => {
 
       context.res.cookie('auth-token', token, { httpOnly: true })
 
-      const projects = await ProjectModel.find({ id: user.projects })
-
       return {
         user: {
-          ...(user as any).toObject(),
-          projects: projects.map((proj) => proj.toObject())
+          ...(user as any).toObject()
         }
       }
     }
@@ -70,25 +62,13 @@ const register: MutationResolvers['register'] = async (
   const salt = await bcrypt.genSalt(10)
   const password = await bcrypt.hash(obj.password, salt)
 
-  const projectId = uuid()
   const userId = uuid()
-
-  const ids: string[] = []
-
-  for (let i = 0; i < 16; i += 1) {
-    ids.push(uuid())
-  }
-
-  await ProjectModel.create(
-    projectData(ids, taskObjects(ids), userId, projectId)
-  )
 
   let newUser = await UserModel.create({
     password,
     id: userId,
     email: obj.email,
     username: obj.username,
-    projects: [projectId],
     profileImg:
       'https://mb.cision.com/Public/12278/2797280/879bd164c711a736_800x800ar.png'
   })
@@ -104,16 +84,9 @@ const register: MutationResolvers['register'] = async (
   }
 
   if (newUser) {
-    let projects: any = await ProjectModel.find({
-      id: { $in: newUser.projects }
-    })
-
-    projects = projects.map((proje: any) => proje.toObject())
-
     return {
       user: {
-        ...newUser,
-        projects: projects
+        ...newUser
       }
     }
   } else {
@@ -124,7 +97,7 @@ const register: MutationResolvers['register'] = async (
 
 const logout: MutationResolvers['logout'] = async (parent, obj, context) => {
   context.res.clearCookie('auth-token')
-  return { message: 'logged out' }
+  return { id: context.userId || '' }
 }
 
 export const authMutations = { login, register, logout, loginWithCookie }

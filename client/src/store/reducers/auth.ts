@@ -1,13 +1,13 @@
 import { ReducerCases } from '../actions/types'
 import { defaultState } from '../defaultState'
 import { createReducer } from './createReducer'
-import { TAuthUser, TState } from '../../types/state'
+import { TUser, TState } from '../../types/state'
 import { TRegister, TLogin } from '../actions/auth'
 
-const REGISTER = (user: TAuthUser, action: TRegister) => {
+const REGISTER = (user: TUser, action: TRegister) => {
   return action.user
 }
-const LOGIN = (user: TAuthUser, action: TLogin) => {
+const LOGIN = (user: TUser, action: TLogin) => {
   return action.user
 }
 

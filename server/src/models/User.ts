@@ -6,7 +6,6 @@ export const UserSchema = new Schema({
   password: { type: String, required: true },
   username: { type: String, required: true },
   profileImg: String,
-  projects: [String],
   id: { type: String, required: true }
 })
 
@@ -30,8 +29,16 @@ export interface UserProps {
   password: string
   username: string
   profileImg?: string
-  projects: any
   id: string
+
+  balance: number
+  purchasedStocks: Array<{
+    purchaseDate: string
+    purchasePrice: number
+    symbol: string
+    name: string
+    activity: Array<{ date: string; purchase: number }>
+  }>
 }
 
 export const UserModel: Model<Document & UserProps> = model(

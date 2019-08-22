@@ -36,7 +36,7 @@ export const GQL_LOGIN_WITH_COOKIE = gql`
 export const GQL_LOGOUT = gql`
   mutation logout {
     logout {
-      message
+      id
     }
   }
 `

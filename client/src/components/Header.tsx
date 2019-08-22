@@ -19,22 +19,13 @@ import {
   Drawer,
   Tab,
   Avatar,
-  Tooltip,
-  Button,
-  Menu
+  Tooltip
 } from '@material-ui/core'
 import { Trail } from 'react-spring/renderprops'
-import {
-  HowToReg,
-  PieChart,
-  CalendarToday,
-  Help,
-  Settings
-} from '@material-ui/icons'
+import { HowToReg, PieChart, Help, Settings } from '@material-ui/icons'
 import { Link as NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { TState } from '../types/state'
-import { ProjectFinder } from './ProjectFinder/ProjectFinder'
 
 /**
  * @todo Refresh changing tab is kinda slow
@@ -65,11 +56,6 @@ const authItems = [
     label: 'Dashboard',
     pathname: '/dashboard',
     menuIcon: PieChart
-  },
-  {
-    label: 'Calendar',
-    pathname: '/calendar',
-    menuIcon: CalendarToday
   }
 ]
 
@@ -122,7 +108,6 @@ type TProps = WithStyles<typeof styles> &
 
 const Topbar = (props: TProps) => {
   const [drawer, setDrawer] = useState(false)
-  const [anchorEl, setAnchorEl] = useState(null as any)
 
   const { classes } = props
 
@@ -143,32 +128,7 @@ const Topbar = (props: TProps) => {
               style={{ alignItems: 'center' }}
               className={classes.flex}
             >
-              {props.authenticated !== null && (
-                <>
-                  <Button
-                    style={{
-                      margin: 'auto 25px auto 0px',
-                      paddingTop: 8,
-                      paddingBottom: 8
-                    }}
-                    color="primary"
-                    variant="outlined"
-                    onClick={e => setAnchorEl(e.currentTarget)}
-                  >
-                    <MenuIcon />
-                    <span style={{ marginLeft: 5 }}>Projects</span>
-                  </Button>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => setAnchorEl(null)}
-                  >
-                    <div style={{ outline: 'none', margin: 10 }}>
-                      <ProjectFinder variant="menu" />
-                    </div>
-                  </Menu>
-                </>
-              )}
+              {props.authenticated !== null && <></>}
               <div className={classes.inline}>
                 <Typography variant="h6" color="inherit" noWrap>
                   <Trail
@@ -179,7 +139,7 @@ const Topbar = (props: TProps) => {
                     {item => trailProps => (
                       <a
                         target="_blank"
-                        href="https://github.com/conradkay/Mantella"
+                        href="https://github.com/conradkay/Philibo"
                         style={{
                           ...trailProps,
                           color: 'black',
@@ -188,7 +148,7 @@ const Topbar = (props: TProps) => {
                         }}
                         className={classes.tagline}
                       >
-                        Mantella
+                        Philibo
                       </a>
                     )}
                   </Trail>

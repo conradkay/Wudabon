@@ -1,7 +1,6 @@
 import React from 'react'
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { Typography, WithStyles, Button } from '@material-ui/core'
-import { FeatureTable } from './FeatureTable'
 import { Pricing } from './Pricing'
 import { Helmet } from 'react-helmet'
 import { FeatureGallery } from './FeatureGallery'
@@ -52,7 +51,7 @@ export const About = withStyles(styles)((props: TProps) => {
         />
         <meta
           name="description"
-          content="Mantella is the most innovative open-source task manager and kanban Board!"
+          content="Philibo is a platform to exchange stocks in real time without using real money"
         />
       </Helmet>
       <div className={classes.heroContent}>
@@ -66,7 +65,7 @@ export const About = withStyles(styles)((props: TProps) => {
           }}
         >
           <Typography variant="h2" className={classes.heroTitle}>
-            Mantella — It's Free
+            Philibo — It's Free
           </Typography>
           <Button
             variant="contained"
@@ -111,7 +110,7 @@ export const About = withStyles(styles)((props: TProps) => {
         <Typography style={{ marginTop: 20 }} variant="h4" align="center">
           Features
         </Typography>
-        <FeatureTable />
+
         <FeatureGallery />
       </div>
     </div>

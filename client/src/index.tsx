@@ -7,9 +7,7 @@ import { Switch, Route, HashRouter } from 'react-router-dom'
 
 import { store } from './store/store'
 import { createMuiTheme } from '@material-ui/core/styles'
-import { Pomodoro } from './components/Pomodoro/Pomodoro'
 import { AuthRender } from './components/Auth/Auth'
-import { CreateProject } from './components/createProject/CreateProject'
 import { NoMatch } from './components/NoMatch/NoMatch'
 import { Fab, CircularProgress } from '@material-ui/core'
 import { Timer } from '@material-ui/icons'
@@ -24,6 +22,7 @@ import { print } from 'graphql'
 import { loginA } from './store/actions/auth'
 import { Mutation } from './graphql/types'
 import { fetchQuery } from './API/initialize'
+
 
 const secondary = '#0336FF'
 const primary = '#00838f'
@@ -54,10 +53,8 @@ import { openSnackbarA } from './store/actions/snackbar'
 import { GQL_LOGIN_WITH_COOKIE } from './graphql/mutations/auth'
 import { client } from './apollo'
 import { PublicOnlyRoute, PrivateRoute } from './components/utils/Routing'
-import { Project } from './components/Project/Project'
 import { Settings } from './components/Settings/Settings'
 import { Dashboard } from './components/Dashboard/Dashboard'
-import { CalendarWeek } from './components/Calendar/Week'
 
 const Router = () => {
   const [open, setOpen] = useState(false)
@@ -87,7 +84,6 @@ const Router = () => {
     <HashRouter>
       <>
         <Header />
-        <Pomodoro open={open} stateFunc={(bool: boolean) => setOpen(bool)} />
         <WelcomeDialog />
         {!open && (
           <>
@@ -108,12 +104,6 @@ const Router = () => {
               component={Settings}
               componentProps={{}}
             />
-            <PrivateRoute
-              exact
-              path="/calendar"
-              component={CalendarWeek}
-              componentProps={{}}
-            />
             <PublicOnlyRoute
               exact
               path="/login"
@@ -125,18 +115,6 @@ const Router = () => {
               path="/register"
               component={AuthRender}
               componentProps={{ authType: 'Register' }}
-            />
-            <PrivateRoute
-              exact
-              path="/create-project"
-              component={CreateProject}
-              componentProps={{}}
-            />
-            <PrivateRoute
-              exact
-              path="/project/:id"
-              component={Project}
-              componentProps={{}}
             />
             <PrivateRoute
               exact

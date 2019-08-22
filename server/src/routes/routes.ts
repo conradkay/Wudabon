@@ -1,4 +1,4 @@
-import { UserProps } from './../models/User'
+import { UserProps } from '../models/User'
 import express, { Response, Request, NextFunction } from 'express'
 import { UserModel } from '../models/User'
 
@@ -15,13 +15,8 @@ interface UserRouteReq extends Request {
 export const getUser = async (req: UserRouteReq, res: Response) => {
   const user = await UserModel.findOne({ id: req.body.id })
 
-  const userWithProjects = await user!.populate('projects').execPopulate()
-
-  const newProjects = userWithProjects.projects
-
   const returning = {
-    ...(user!.toObject() as UserProps),
-    projects: newProjects
+    ...(user!.toObject() as UserProps)
   }
 
   return returning

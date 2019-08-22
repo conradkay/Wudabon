@@ -5,7 +5,6 @@ import path from 'path'
 import { queries } from './queries/queries'
 import { mutations } from './mutations/mutations'
 import jsonwebtoken from 'jsonwebtoken'
-// Create a logger
 
 const resolvers: any = {
   Query: queries,
@@ -35,5 +34,5 @@ export const gqlServer = new ApolloServer({
 
       return { req, res, user: null }
     }
-  },
+  }
 })

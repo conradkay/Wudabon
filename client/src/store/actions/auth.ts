@@ -1,27 +1,17 @@
 import { UserFieldsFragment } from './../../graphql/types'
 import { RTDispatch } from '../../types/types'
-import { TState, TAuthUser } from '../../types/state'
+import { TState, TUser } from '../../types/state'
 import { openSnackbarA } from './snackbar'
 import { initializeAuthState } from '../../API/initialize'
-
-export const transformUser = (user: UserFieldsFragment): TAuthUser => ({
-  username: user.username,
-  profileImg: user.profileImg || '',
-  joinedIds: user.projects.map(proj =>
-    typeof proj === 'string' ? proj : (proj.id as string)
-  ),
-  id: user.id as string,
-  email: user.email
-})
 
 export const registerA = (user: UserFieldsFragment) => {
   return (dispatch: RTDispatch, getState: () => TState) => {
     if (user) {
-      const authUser = transformUser(user)
+      const authUser = user
 
       dispatch(openSnackbarA('Registered! Welcome To Mantella!', 'success'))
 
-      dispatch({ type: 'REGISTER', user: authUser })
+      dispatch({ type: 'REGISTER', user: authUser } as any)
 
       dispatch(initializeAuthState(user))
     } else {
@@ -33,9 +23,9 @@ export const registerA = (user: UserFieldsFragment) => {
 export const loginA = (user: UserFieldsFragment) => {
   return (dispatch: RTDispatch, getState: () => TState) => {
     if (user) {
-      const authUser = transformUser(user)
+      const authUser = user
 
-      dispatch({ type: 'LOGIN', user: authUser })
+      dispatch({ type: 'LOGIN', user: authUser } as any)
       dispatch(openSnackbarA('Logged in Successfully', 'success'))
 
       dispatch(initializeAuthState(user))
@@ -47,11 +37,11 @@ export const loginA = (user: UserFieldsFragment) => {
 
 export type TRegister = {
   type: 'REGISTER'
-  user: TAuthUser
+  user: TUser
 }
 
 export type TLogin = {
   type: 'LOGIN'
-  user: TAuthUser
+  user: TUser
 }
 export type UserAction = TRegister | TLogin

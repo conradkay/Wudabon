@@ -1,33 +1,15 @@
-import { TProject } from './project'
-
-export type TStopWatch = {
-  pastTimes: number[]
-  time: number
-  paused: boolean
-  highest: number
-}
-
-export type TPomodoro = {
-  paused: boolean
-  working: boolean // if false we are in break
-  currSeconds: number
-  breakSeconds: number
-  workSeconds: number
-  selectingTask: boolean
-  selectedTaskId: null | string
-  stopWatch: TStopWatch
-}
-
-export type TProfile = {
+export type TUser = {
   id: string
   profileImg: string
   username: string
-  joinedIds: string[]
   email: string
+
+  balance: number
+  purchasedStocks: TPurchasedStock[]
 }
 
-export type TProfiles = {
-  [id: string]: TProfile
+export type TUsers = {
+  [id: string]: TUser
 }
 
 export type TVariant = 'success' | 'warning' | 'error' | 'standard'
@@ -38,12 +20,14 @@ export type TSnackbar = {
   variant: TVariant
 }
 
-export type TAuthUser = TProfile
+export type TPurchasedStock = {
+  purchaseDate: string
+  purchasePrice: number
+  symbol: string
+  name: string // not necessary i guess
+}
 
 export type TState = {
   snackbar: TSnackbar
-  isLoading: boolean
-  pomodoro: TPomodoro
-  user: TAuthUser | null
-  projects: TProject[]
+  user: TUser | null
 }
