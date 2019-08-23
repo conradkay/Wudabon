@@ -9,8 +9,6 @@ export const UserSchema = new Schema({
   id: { type: String, required: true },
   purchasedStocks: [
     {
-      purchasePrice: { type: Number, required: true },
-      purchaseDate: { type: String, required: true },
       symbol: { type: String, required: true },
       name: { type: String, required: true },
       amount: { type: Number, required: true },
@@ -48,9 +46,8 @@ export interface UserProps {
 
   balance: number
   purchasedStocks: Array<{
-    purchaseDate: string
-    purchasePrice: number
     symbol: string
+    amount: number
     name: string
     activity: Array<{ date: string; purchase: number }>
   }>

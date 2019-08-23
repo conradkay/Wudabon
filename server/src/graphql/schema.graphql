@@ -43,6 +43,5 @@ type Mutation {
   loginWithCookie: Auth!
   logout: Void!
 
-  sellStock(amount: Int!, symbol: String!): String! # returns symbol of stock
-  buyStock(amount: Int!, symbol: String!): String! # returns symbol of stock
+  buySellStock(amount: Int!, symbol: String!): String! # returns symbol of stock
 }
