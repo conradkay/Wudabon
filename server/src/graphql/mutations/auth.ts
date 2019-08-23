@@ -16,7 +16,7 @@ const loginWithCookie: MutationResolvers['loginWithCookie'] = async (
   }
 
   const user: UserProps | null = await UserModel.findOne({
-    id: context.userId.id
+    id: context.userId
   })
 
   if (!user) {

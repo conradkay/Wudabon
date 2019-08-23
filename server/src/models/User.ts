@@ -6,7 +6,22 @@ export const UserSchema = new Schema({
   password: { type: String, required: true },
   username: { type: String, required: true },
   profileImg: String,
-  id: { type: String, required: true }
+  id: { type: String, required: true },
+  purchasedStocks: [
+    {
+      purchasePrice: { type: Number, required: true },
+      purchaseDate: { type: String, required: true },
+      symbol: { type: String, required: true },
+      name: { type: String, required: true },
+      amount: { type: Number, required: true },
+      activity: [
+        {
+          date: { type: String, required: true },
+          purchase: { type: String, required: true }
+        }
+      ]
+    }
+  ]
 })
 
 export const getUserByEmail = async (email: string) => {

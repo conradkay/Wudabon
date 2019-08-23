@@ -24,15 +24,15 @@ export const gqlServer = new ApolloServer({
   tracing: true,
   context: async ({ req, res }) => {
     try {
-      const token = jsonwebtoken.decode(req.cookies['auth-token'])
+      const token: any = jsonwebtoken.decode(req.cookies['auth-token'])
 
-      return { req, res, userId: token }
+      return { req, res, userId: token.id }
     } catch (err) {
       if (res) {
         res.clearCookie('auth-token')
       }
 
-      return { req, res, user: null }
+      return { req, res, userId: null }
     }
   }
 })

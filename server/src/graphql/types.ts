@@ -21,7 +21,8 @@ export type Mutation = {
   login: Auth
   loginWithCookie: Auth
   logout: Void
-  getPurchased: Array<SimpleStock>
+  sellStock: Scalars['String']
+  buyStock: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -35,24 +36,37 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 }
 
+export type MutationSellStockArgs = {
+  amount: Scalars['Int']
+  symbol: Scalars['String']
+}
+
+export type MutationBuyStockArgs = {
+  amount: Scalars['Int']
+  symbol: Scalars['String']
+}
+
 export type Query = {
   user?: Maybe<User>
-  getStock: Boo
+  purchasedStocks: SimpleStock[]
 }
 
 export type QueryUserArgs = {
   id: Scalars['String']
 }
 
-export type QueryGetStockArgs = {
-  symbol: Scalars['String']
-}
-
 export type SimpleStock = {
-  purchaseDate: Scalars['String']
   purchasePrice: Scalars['Int']
+  purchaseDate: Scalars['String']
   symbol: Scalars['String']
   name: Scalars['String']
+  amount: Scalars['Int']
+  activity: StockActivity[]
+}
+
+export type StockActivity = {
+  date: Scalars['String']
+  purchase: Scalars['Int']
 }
 
 export type User = {
@@ -142,13 +156,14 @@ export type ResolversTypes = {
   Query: {}
   String: Scalars['String']
   User: User
-  Boo: Boo
+  SimpleStock: SimpleStock
+  Int: Scalars['Int']
+  StockActivity: StockActivity
   Mutation: {}
   Auth: Auth
   Void: Void
-  SimpleStock: SimpleStock
-  Int: Scalars['Int']
   Boolean: Scalars['Boolean']
+  Boo: Boo
 }
 
 export type AuthResolvers<
@@ -183,10 +198,17 @@ export type MutationResolvers<
   >
   loginWithCookie?: Resolver<ResolversTypes['Auth'], ParentType, ContextType>
   logout?: Resolver<ResolversTypes['Void'], ParentType, ContextType>
-  getPurchased?: Resolver<
-    Array<ResolversTypes['SimpleStock']>,
+  sellStock?: Resolver<
+    ResolversTypes['String'],
     ParentType,
-    ContextType
+    ContextType,
+    MutationSellStockArgs
+  >
+  buyStock?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType,
+    MutationBuyStockArgs
   >
 }
 
@@ -200,11 +222,10 @@ export type QueryResolvers<
     ContextType,
     QueryUserArgs
   >
-  getStock?: Resolver<
-    ResolversTypes['Boo'],
+  purchasedStocks?: Resolver<
+    Array<ResolversTypes['SimpleStock']>,
     ParentType,
-    ContextType,
-    QueryGetStockArgs
+    ContextType
   >
 }
 
@@ -212,10 +233,24 @@ export type SimpleStockResolvers<
   ContextType = any,
   ParentType = ResolversTypes['SimpleStock']
 > = {
-  purchaseDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   purchasePrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  purchaseDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  activity?: Resolver<
+    Array<ResolversTypes['StockActivity']>,
+    ParentType,
+    ContextType
+  >
+}
+
+export type StockActivityResolvers<
+  ContextType = any,
+  ParentType = ResolversTypes['StockActivity']
+> = {
+  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  purchase?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
 }
 
 export type UserResolvers<
@@ -245,6 +280,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   SimpleStock?: SimpleStockResolvers<ContextType>
+  StockActivity?: StockActivityResolvers<ContextType>
   User?: UserResolvers<ContextType>
   Void?: VoidResolvers<ContextType>
 }

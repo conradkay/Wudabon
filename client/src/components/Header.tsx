@@ -137,19 +137,21 @@ const Topbar = (props: TProps) => {
                     to={{ transform: 'translate3d(0,0px,0)' }}
                   >
                     {item => trailProps => (
-                      <a
-                        target="_blank"
-                        href="https://github.com/conradkay/Philibo"
-                        style={{
-                          ...trailProps,
-                          color: 'black',
-                          textDecoration: 'none',
-                          paddingRight: 5
-                        }}
-                        className={classes.tagline}
-                      >
-                        Philibo
-                      </a>
+                      <Tooltip title="Data provided by IEX Cloud (https://iexcloud.io)">
+                        <a
+                          target="_blank"
+                          href="https://github.com/conradkay/Philibo"
+                          style={{
+                            ...trailProps,
+                            color: 'black',
+                            textDecoration: 'none',
+                            paddingRight: 5
+                          }}
+                          className={classes.tagline}
+                        >
+                          Philibo
+                        </a>
+                      </Tooltip>
                     )}
                   </Trail>
                 </Typography>

@@ -15,12 +15,19 @@ export type Auth = {
   user: User
 }
 
+export type Boo = {
+  __typename?: 'Boo'
+  output: Scalars['String']
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   register: Auth
   login: Auth
   loginWithCookie: Auth
   logout: Void
+  sellStock: Scalars['String']
+  buyStock: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -34,13 +41,40 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 }
 
+export type MutationSellStockArgs = {
+  amount: Scalars['Int']
+  symbol: Scalars['String']
+}
+
+export type MutationBuyStockArgs = {
+  amount: Scalars['Int']
+  symbol: Scalars['String']
+}
+
 export type Query = {
   __typename?: 'Query'
   user?: Maybe<User>
+  purchasedStocks: Array<SimpleStock>
 }
 
 export type QueryUserArgs = {
   id: Scalars['String']
+}
+
+export type SimpleStock = {
+  __typename?: 'SimpleStock'
+  purchasePrice: Scalars['Int']
+  purchaseDate: Scalars['String']
+  symbol: Scalars['String']
+  name: Scalars['String']
+  amount: Scalars['Int']
+  activity: Array<StockActivity>
+}
+
+export type StockActivity = {
+  __typename?: 'StockActivity'
+  date: Scalars['String']
+  purchase: Scalars['Int']
 }
 
 export type User = {
@@ -109,6 +143,12 @@ export type DirectiveResolverFn<TResult, TArgs = {}, TContext = {}> = (
 export namespace QueryResolvers {
   export interface Resolvers<TContext = {}, TypeParent = {}> {
     user?: UserResolver<Maybe<User>, TypeParent, TContext>
+
+    purchasedStocks?: PurchasedStocksResolver<
+      SimpleStock[],
+      TypeParent,
+      TContext
+    >
   }
 
   export type UserResolver<
@@ -119,6 +159,12 @@ export namespace QueryResolvers {
   export interface UserArgs {
     id: string
   }
+
+  export type PurchasedStocksResolver<
+    R = SimpleStock[],
+    Parent = {},
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
 }
 
 export namespace UserResolvers {
@@ -154,6 +200,72 @@ export namespace UserResolvers {
   > = Resolver<R, Parent, TContext>
 }
 
+export namespace SimpleStockResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = SimpleStock> {
+    purchasePrice?: PurchasePriceResolver<number, TypeParent, TContext>
+
+    purchaseDate?: PurchaseDateResolver<string, TypeParent, TContext>
+
+    symbol?: SymbolResolver<string, TypeParent, TContext>
+
+    name?: NameResolver<string, TypeParent, TContext>
+
+    amount?: AmountResolver<number, TypeParent, TContext>
+
+    activity?: ActivityResolver<StockActivity[], TypeParent, TContext>
+  }
+
+  export type PurchasePriceResolver<
+    R = number,
+    Parent = SimpleStock,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type PurchaseDateResolver<
+    R = string,
+    Parent = SimpleStock,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type SymbolResolver<
+    R = string,
+    Parent = SimpleStock,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type NameResolver<
+    R = string,
+    Parent = SimpleStock,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type AmountResolver<
+    R = number,
+    Parent = SimpleStock,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type ActivityResolver<
+    R = StockActivity[],
+    Parent = SimpleStock,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+}
+
+export namespace StockActivityResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = StockActivity> {
+    date?: DateResolver<string, TypeParent, TContext>
+
+    purchase?: PurchaseResolver<number, TypeParent, TContext>
+  }
+
+  export type DateResolver<
+    R = string,
+    Parent = StockActivity,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type PurchaseResolver<
+    R = number,
+    Parent = StockActivity,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = {}, TypeParent = {}> {
     register?: RegisterResolver<Auth, TypeParent, TContext>
@@ -163,6 +275,10 @@ export namespace MutationResolvers {
     loginWithCookie?: LoginWithCookieResolver<Auth, TypeParent, TContext>
 
     logout?: LogoutResolver<Void, TypeParent, TContext>
+
+    sellStock?: SellStockResolver<string, TypeParent, TContext>
+
+    buyStock?: BuyStockResolver<string, TypeParent, TContext>
   }
 
   export type RegisterResolver<R = Auth, Parent = {}, TContext = {}> = Resolver<
@@ -201,6 +317,27 @@ export namespace MutationResolvers {
     Parent,
     TContext
   >
+  export type SellStockResolver<
+    R = string,
+    Parent = {},
+    TContext = {}
+  > = Resolver<R, Parent, TContext, SellStockArgs>
+  export interface SellStockArgs {
+    amount: number
+
+    symbol: string
+  }
+
+  export type BuyStockResolver<
+    R = string,
+    Parent = {},
+    TContext = {}
+  > = Resolver<R, Parent, TContext, BuyStockArgs>
+  export interface BuyStockArgs {
+    amount: number
+
+    symbol: string
+  }
 }
 
 export namespace AuthResolvers {
@@ -225,6 +362,18 @@ export namespace VoidResolvers {
     Parent,
     TContext
   >
+}
+
+export namespace BooResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = Boo> {
+    output?: OutputResolver<string, TypeParent, TContext>
+  }
+
+  export type OutputResolver<
+    R = string,
+    Parent = Boo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
 }
 
 /** Directs the executor to skip this field or fragment when the `if` argument is true. */
@@ -263,9 +412,12 @@ export interface DeprecatedDirectiveArgs {
 export type IResolvers<TContext = {}> = {
   Query?: QueryResolvers.Resolvers<TContext>
   User?: UserResolvers.Resolvers<TContext>
+  SimpleStock?: SimpleStockResolvers.Resolvers<TContext>
+  StockActivity?: StockActivityResolvers.Resolvers<TContext>
   Mutation?: MutationResolvers.Resolvers<TContext>
   Auth?: AuthResolvers.Resolvers<TContext>
   Void?: VoidResolvers.Resolvers<TContext>
+  Boo?: BooResolvers.Resolvers<TContext>
 } & { [typeName: string]: never }
 
 export type IDirectiveResolvers<Result> = {

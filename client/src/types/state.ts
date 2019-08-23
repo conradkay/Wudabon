@@ -21,10 +21,12 @@ export type TSnackbar = {
 }
 
 export type TPurchasedStock = {
-  purchaseDate: string
   purchasePrice: number
+  purchaseDate: string
   symbol: string
-  name: string // not necessary i guess
+  name: string
+  amount: number
+  activity: Array<{date: string, purchase: number}>
 }
 
 export type TState = {
