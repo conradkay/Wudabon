@@ -11,10 +11,12 @@ const randInt = (max: number) => {
   return Math.floor(Math.random() * Math.floor(max))
 }
 const genNums = (amount: number) => {
-  const result = []
+  const result: number[] = []
+
+  const MAX_RAND = 100
 
   for (let i = 0; i < amount; i++) {
-    result.push(randInt(100))
+    result.push(randInt(MAX_RAND))
   }
 
   return result
@@ -75,11 +77,13 @@ export const Dashboard = () => {
       }
     })
 
+    const REFRESH_CHART_INTERVAL_MS = 2000
+
     const interval = setInterval(() => {
       chart.data.datasets![0].data = genNums(7)
 
       chart!.update()
-    }, 2000)
+    }, REFRESH_CHART_INTERVAL_MS)
 
     return () => clearInterval(interval)
   })

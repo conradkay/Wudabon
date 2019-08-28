@@ -1,11 +1,11 @@
-import { UserFieldsFragment } from './../../graphql/types'
-import { RTDispatch } from '../../types/types'
-import { TState, TUser } from '../../types/state'
-import { openSnackbarA } from './snackbar'
-import { initializeAuthState } from '../../API/initialize'
+import {UserFieldsFragment} from '../../graphql/types'
+import {RTDispatch} from '../../types/types'
+import {TUser} from '../../types/state'
+import {openSnackbarA} from './snackbar'
+import {initializeAuthState} from '../../API/initialize'
 
 export const registerA = (user: UserFieldsFragment) => {
-  return (dispatch: RTDispatch, getState: () => TState) => {
+  return (dispatch: RTDispatch) => {
     if (user) {
       const authUser = user
 
@@ -21,11 +21,9 @@ export const registerA = (user: UserFieldsFragment) => {
 }
 
 export const loginA = (user: UserFieldsFragment) => {
-  return (dispatch: RTDispatch, getState: () => TState) => {
+  return (dispatch: RTDispatch) => {
     if (user) {
-      const authUser = user
-
-      dispatch({ type: 'LOGIN', user: authUser } as any)
+      dispatch({type: 'LOGIN', user: user} as any)
       dispatch(openSnackbarA('Logged in Successfully', 'success'))
 
       dispatch(initializeAuthState(user))

@@ -1,11 +1,11 @@
 import React from 'react'
-import { withStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { Typography, WithStyles, Button } from '@material-ui/core'
-import { Pricing } from './Pricing'
-import { Helmet } from 'react-helmet'
-import { FeatureGallery } from './FeatureGallery'
+import {createStyles, withStyles} from '@material-ui/core/styles'
+import {Button, Typography, WithStyles} from '@material-ui/core'
+import {Pricing} from './Pricing'
+import {Helmet} from 'react-helmet'
+import {FeatureGallery} from './FeatureGallery'
 
-const styles = (theme: Theme) =>
+const styles = () =>
   createStyles({
     heroContent: {
       margin: '0 auto',
@@ -45,7 +45,7 @@ export const About = withStyles(styles)((props: TProps) => {
         <style type="text/css">{` body { background-color: #1d364c; } h4 { color: white !important; }`}</style>
         <script
           type="text/javascript"
-          src="https://platform.linkedin.com/badges/js/profile.js"
+          src={'https://platform.linkedin.com/badges/js/profile.js'}
           async
           defer
         />

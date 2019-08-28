@@ -1,4 +1,5 @@
 /* tslint:disable */
+/* noinspection */
 export type Maybe<T> = T | null
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -26,8 +27,7 @@ export type Mutation = {
   login: Auth
   loginWithCookie: Auth
   logout: Void
-  sellStock: Scalars['String']
-  buyStock: Scalars['String']
+  buySellStock: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -41,20 +41,22 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 }
 
-export type MutationSellStockArgs = {
+export type MutationBuySellStockArgs = {
   amount: Scalars['Int']
   symbol: Scalars['String']
 }
 
-export type MutationBuyStockArgs = {
-  amount: Scalars['Int']
+export type PortfolioStock = {
+  __typename?: 'PortfolioStock'
+  price: Scalars['Float']
   symbol: Scalars['String']
+  name: Scalars['String']
 }
 
 export type Query = {
   __typename?: 'Query'
   user?: Maybe<User>
-  purchasedStocks: Array<SimpleStock>
+  purchasedStocks: Array<PortfolioStock>
 }
 
 export type QueryUserArgs = {
@@ -63,8 +65,7 @@ export type QueryUserArgs = {
 
 export type SimpleStock = {
   __typename?: 'SimpleStock'
-  purchasePrice: Scalars['Int']
-  purchaseDate: Scalars['String']
+  purchasePriceTotal: Scalars['Float']
   symbol: Scalars['String']
   name: Scalars['String']
   amount: Scalars['Int']
@@ -83,13 +84,15 @@ export type User = {
   profileImg?: Maybe<Scalars['String']>
   username: Scalars['String']
   email: Scalars['String']
+  balance: Scalars['Float']
+  purchasedStocks: Array<SimpleStock>
 }
 
 export type Void = {
   __typename?: 'Void'
   id: Scalars['String']
 }
-import { GraphQLResolveInfo } from 'graphql'
+import {GraphQLResolveInfo} from 'graphql'
 
 export type Resolver<Result, Parent = {}, TContext = {}, Args = {}> = (
   parent: Parent,
@@ -144,8 +147,7 @@ export namespace QueryResolvers {
   export interface Resolvers<TContext = {}, TypeParent = {}> {
     user?: UserResolver<Maybe<User>, TypeParent, TContext>
 
-    purchasedStocks?: PurchasedStocksResolver<
-      SimpleStock[],
+    purchasedStocks?: PurchasedStocksResolver<PortfolioStock[],
       TypeParent,
       TContext
     >
@@ -160,8 +162,7 @@ export namespace QueryResolvers {
     id: string
   }
 
-  export type PurchasedStocksResolver<
-    R = SimpleStock[],
+  export type PurchasedStocksResolver<R = PortfolioStock[],
     Parent = {},
     TContext = {}
   > = Resolver<R, Parent, TContext>
@@ -176,6 +177,12 @@ export namespace UserResolvers {
     username?: UsernameResolver<string, TypeParent, TContext>
 
     email?: EmailResolver<string, TypeParent, TContext>
+
+    balance?: BalanceResolver<number, TypeParent, TContext>
+
+    purchasedStocks?: PurchasedStocksResolver<SimpleStock[],
+      TypeParent,
+      TContext>
   }
 
   export type IdResolver<R = string, Parent = User, TContext = {}> = Resolver<
@@ -198,13 +205,19 @@ export namespace UserResolvers {
     Parent = User,
     TContext = {}
   > = Resolver<R, Parent, TContext>
+  export type BalanceResolver<R = number,
+    Parent = User,
+    TContext = {}> = Resolver<R, Parent, TContext>
+  export type PurchasedStocksResolver<R = SimpleStock[],
+    Parent = User,
+    TContext = {}> = Resolver<R, Parent, TContext>
 }
 
 export namespace SimpleStockResolvers {
   export interface Resolvers<TContext = {}, TypeParent = SimpleStock> {
-    purchasePrice?: PurchasePriceResolver<number, TypeParent, TContext>
-
-    purchaseDate?: PurchaseDateResolver<string, TypeParent, TContext>
+    purchasePriceTotal?: PurchasePriceTotalResolver<number,
+      TypeParent,
+      TContext>
 
     symbol?: SymbolResolver<string, TypeParent, TContext>
 
@@ -215,13 +228,8 @@ export namespace SimpleStockResolvers {
     activity?: ActivityResolver<StockActivity[], TypeParent, TContext>
   }
 
-  export type PurchasePriceResolver<
+  export type PurchasePriceTotalResolver<
     R = number,
-    Parent = SimpleStock,
-    TContext = {}
-  > = Resolver<R, Parent, TContext>
-  export type PurchaseDateResolver<
-    R = string,
     Parent = SimpleStock,
     TContext = {}
   > = Resolver<R, Parent, TContext>
@@ -266,6 +274,26 @@ export namespace StockActivityResolvers {
   > = Resolver<R, Parent, TContext>
 }
 
+export namespace PortfolioStockResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = PortfolioStock> {
+    price?: PriceResolver<number, TypeParent, TContext>
+
+    symbol?: SymbolResolver<string, TypeParent, TContext>
+
+    name?: NameResolver<string, TypeParent, TContext>
+  }
+
+  export type PriceResolver<R = number,
+    Parent = PortfolioStock,
+    TContext = {}> = Resolver<R, Parent, TContext>
+  export type SymbolResolver<R = string,
+    Parent = PortfolioStock,
+    TContext = {}> = Resolver<R, Parent, TContext>
+  export type NameResolver<R = string,
+    Parent = PortfolioStock,
+    TContext = {}> = Resolver<R, Parent, TContext>
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<TContext = {}, TypeParent = {}> {
     register?: RegisterResolver<Auth, TypeParent, TContext>
@@ -276,9 +304,7 @@ export namespace MutationResolvers {
 
     logout?: LogoutResolver<Void, TypeParent, TContext>
 
-    sellStock?: SellStockResolver<string, TypeParent, TContext>
-
-    buyStock?: BuyStockResolver<string, TypeParent, TContext>
+    buySellStock?: BuySellStockResolver<string, TypeParent, TContext>
   }
 
   export type RegisterResolver<R = Auth, Parent = {}, TContext = {}> = Resolver<
@@ -317,23 +343,12 @@ export namespace MutationResolvers {
     Parent,
     TContext
   >
-  export type SellStockResolver<
+  export type BuySellStockResolver<
     R = string,
     Parent = {},
-    TContext = {}
-  > = Resolver<R, Parent, TContext, SellStockArgs>
-  export interface SellStockArgs {
-    amount: number
+    TContext = {}> = Resolver<R, Parent, TContext, BuySellStockArgs>
 
-    symbol: string
-  }
-
-  export type BuyStockResolver<
-    R = string,
-    Parent = {},
-    TContext = {}
-  > = Resolver<R, Parent, TContext, BuyStockArgs>
-  export interface BuyStockArgs {
+  export interface BuySellStockArgs {
     amount: number
 
     symbol: string
@@ -414,6 +429,7 @@ export type IResolvers<TContext = {}> = {
   User?: UserResolvers.Resolvers<TContext>
   SimpleStock?: SimpleStockResolvers.Resolvers<TContext>
   StockActivity?: StockActivityResolvers.Resolvers<TContext>
+  PortfolioStock?: PortfolioStockResolvers.Resolvers<TContext>
   Mutation?: MutationResolvers.Resolvers<TContext>
   Auth?: AuthResolvers.Resolvers<TContext>
   Void?: VoidResolvers.Resolvers<TContext>

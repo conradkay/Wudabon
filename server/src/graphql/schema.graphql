@@ -1,6 +1,6 @@
 type Query {
   user(id: String!): User
-  purchasedStocks: [SimpleStock!]!
+  purchasedStocks: [PortfolioStock!]!
 }
 
 type StockActivity {
@@ -9,12 +9,18 @@ type StockActivity {
 }
 
 type SimpleStock {
-  purchasePrice: Int!
-  purchaseDate: String!
+  purchasePriceTotal: Float!
   symbol: String!
   name: String!
   amount: Int!
   activity: [StockActivity!]!
+}
+
+# comes from simpleStock when finding purchased in main menu
+type PortfolioStock {
+  price: Float! # updated before sending
+  symbol: String!
+  name: String!
 }
 
 type Boo {
@@ -26,6 +32,9 @@ type User {
   profileImg: String
   username: String!
   email: String!
+  balance: Float!
+
+  purchasedStocks: [SimpleStock!]!
 }
 
 type Auth {

@@ -1,30 +1,26 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
 import {
-  Paper,
-  Grid,
-  Button,
-  withStyles,
-  WithStyles,
   Avatar,
-  Typography,
+  Button,
+  CircularProgress,
+  Grid,
   IconButton,
+  Paper,
   TextField,
-  CircularProgress
+  Typography,
+  withStyles,
+  WithStyles
 } from '@material-ui/core'
-import { LockOpen } from '@material-ui/icons'
-import { formStyles } from '../styles/formStyles'
-import { openSnackbarA } from '../../store/actions/snackbar'
-import { Link } from 'react-router-dom'
+import {LockOpen} from '@material-ui/icons'
+import {formStyles} from '../styles/formStyles'
+import {openSnackbarA} from '../../store/actions/snackbar'
+import {Link} from 'react-router-dom'
 import Helmet from 'react-helmet'
-import { registerA, loginA } from '../../store/actions/auth'
-import { Mutation, MutationResult } from 'react-apollo'
-import {
-  MutationResolvers,
-  RegisterMutation,
-  LoginMutation
-} from '../../graphql/types'
-import { GQL_REGISTER, GQL_LOGIN } from '../../graphql/mutations/auth'
+import {loginA, registerA} from '../../store/actions/auth'
+import {Mutation, MutationResult} from 'react-apollo'
+import {LoginMutation, MutationResolvers, RegisterMutation} from '../../graphql/types'
+import {GQL_LOGIN, GQL_REGISTER} from '../../graphql/mutations/auth'
 
 type OwnProps = {
   authType: 'Register' | 'Login'
@@ -73,17 +69,19 @@ const Auth = ({ authType, openSnackbar, classes, register, login }: TProps) => {
               }
             }
           }}
-          onError={(error: any) => {
+          onError={() => {
             openSnackbar('Could not Authenticate!', 'error')
           }}
           mutation={authType === 'Register' ? GQL_REGISTER : GQL_LOGIN}
         >
           {(
-            auth: (args: {
-              variables:
-                | MutationResolvers.LoginArgs
-                | MutationResolvers.RegisterArgs
-            }) => any,
+            auth: (
+              args: {
+                variables:
+                  | MutationResolvers.LoginArgs
+                  | MutationResolvers.RegisterArgs
+              }
+            ) => any,
             result: MutationResult<LoginMutation & RegisterMutation>
           ) => {
             return (
@@ -199,24 +197,28 @@ const Auth = ({ authType, openSnackbar, classes, register, login }: TProps) => {
                   >
                     <IconButton>
                       <img
+                        alt={"google"}
                         src="https://cdn4.iconfinder.com/data/icons/new-google-logo-2015/400/new-google-favicon-512.png"
                         style={{ height: 50, width: 50 }}
                       />
                     </IconButton>
                     <IconButton style={{ marginLeft: 8 }}>
                       <img
+                        alt={"facebook"}
                         src="https://cdn4.iconfinder.com/data/icons/social-media-icons-the-circle-set/48/facebook_circle-512.png"
                         style={{ height: 50, width: 50 }}
                       />
                     </IconButton>
                     <IconButton style={{ marginLeft: 8 }}>
                       <img
+                        alt={"github"}
                         src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-social-github-512.png"
                         style={{ height: 50, width: 50 }}
                       />
                     </IconButton>
                     <IconButton style={{ marginLeft: 8 }}>
                       <img
+                        alt={"twitter"}
                         src="https://cdn3.iconfinder.com/data/icons/social-icons-5/607/Twitterbird.png"
                         style={{ height: 50, width: 50 }}
                       />

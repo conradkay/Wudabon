@@ -1,6 +1,5 @@
-import { UserProps } from '../models/User'
-import express, { Response, Request, NextFunction } from 'express'
-import { UserModel } from '../models/User'
+import {UserModel, UserProps} from '../models/User'
+import express, {NextFunction, Request, Response} from 'express'
 
 const router = express.Router()
 
@@ -12,14 +11,12 @@ interface UserRouteReq extends Request {
   }
 }
 
-export const getUser = async (req: UserRouteReq, res: Response) => {
+export const getUser = async(req: UserRouteReq) => {
   const user = await UserModel.findOne({ id: req.body.id })
 
-  const returning = {
+  return {
     ...(user!.toObject() as UserProps)
   }
-
-  return returning
 }
 
 const getUserHandler = async (
@@ -28,7 +25,7 @@ const getUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const data = await getUser(req, res)
+    const data = await getUser(req)
     res.json({ data })
   } catch (err) {
     next(err)

@@ -21,8 +21,7 @@ export type Mutation = {
   login: Auth
   loginWithCookie: Auth
   logout: Void
-  sellStock: Scalars['String']
-  buyStock: Scalars['String']
+  buySellStock: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -36,19 +35,20 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 }
 
-export type MutationSellStockArgs = {
+export type MutationBuySellStockArgs = {
   amount: Scalars['Int']
   symbol: Scalars['String']
 }
 
-export type MutationBuyStockArgs = {
-  amount: Scalars['Int']
+export type PortfolioStock = {
+  price: Scalars['Float']
   symbol: Scalars['String']
+  name: Scalars['String']
 }
 
 export type Query = {
   user?: Maybe<User>
-  purchasedStocks: SimpleStock[]
+  purchasedStocks: PortfolioStock[]
 }
 
 export type QueryUserArgs = {
@@ -56,8 +56,7 @@ export type QueryUserArgs = {
 }
 
 export type SimpleStock = {
-  purchasePrice: Scalars['Int']
-  purchaseDate: Scalars['String']
+  purchasePriceTotal: Scalars['Float']
   symbol: Scalars['String']
   name: Scalars['String']
   amount: Scalars['Int']
@@ -74,13 +73,15 @@ export type User = {
   profileImg?: Maybe<Scalars['String']>
   username: Scalars['String']
   email: Scalars['String']
+  balance: Scalars['Float']
+  purchasedStocks: SimpleStock[]
 }
 
 export type Void = {
   id: Scalars['String']
 }
 
-import { GraphQLResolveInfo } from 'graphql'
+import {GraphQLResolveInfo} from 'graphql'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -156,9 +157,11 @@ export type ResolversTypes = {
   Query: {}
   String: Scalars['String']
   User: User
+  Float: Scalars['Float']
   SimpleStock: SimpleStock
   Int: Scalars['Int']
   StockActivity: StockActivity
+  PortfolioStock: PortfolioStock
   Mutation: {}
   Auth: Auth
   Void: Void
@@ -198,18 +201,18 @@ export type MutationResolvers<
   >
   loginWithCookie?: Resolver<ResolversTypes['Auth'], ParentType, ContextType>
   logout?: Resolver<ResolversTypes['Void'], ParentType, ContextType>
-  sellStock?: Resolver<
+  buySellStock?: Resolver<
     ResolversTypes['String'],
     ParentType,
     ContextType,
-    MutationSellStockArgs
-  >
-  buyStock?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType,
-    MutationBuyStockArgs
-  >
+    MutationBuySellStockArgs>
+}
+
+export type PortfolioStockResolvers<ContextType = any,
+  ParentType = ResolversTypes['PortfolioStock']> = {
+  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
 }
 
 export type QueryResolvers<
@@ -222,8 +225,7 @@ export type QueryResolvers<
     ContextType,
     QueryUserArgs
   >
-  purchasedStocks?: Resolver<
-    Array<ResolversTypes['SimpleStock']>,
+  purchasedStocks?: Resolver<Array<ResolversTypes['PortfolioStock']>,
     ParentType,
     ContextType
   >
@@ -233,8 +235,9 @@ export type SimpleStockResolvers<
   ContextType = any,
   ParentType = ResolversTypes['SimpleStock']
 > = {
-  purchasePrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  purchaseDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  purchasePriceTotal?: Resolver<ResolversTypes['Float'],
+    ParentType,
+    ContextType>
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
@@ -265,6 +268,10 @@ export type UserResolvers<
   >
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  balance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  purchasedStocks?: Resolver<Array<ResolversTypes['SimpleStock']>,
+    ParentType,
+    ContextType>
 }
 
 export type VoidResolvers<
@@ -278,6 +285,7 @@ export type Resolvers<ContextType = any> = {
   Auth?: AuthResolvers<ContextType>
   Boo?: BooResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
+  PortfolioStock?: PortfolioStockResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   SimpleStock?: SimpleStockResolvers<ContextType>
   StockActivity?: StockActivityResolvers<ContextType>

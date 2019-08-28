@@ -8,6 +8,7 @@
     "server": "npm start --prefix server",
     "build": "npm i --prefix server && cd client && npm install && npm run build",
     "client": "npm start --prefix client",
+    "dev": "concurrently --kill-others-on-fail  \"npm run server\" \"npm run client\" ",
     "gen": "npm run graphql-gen --prefix server && npm run graphql-gen --prefix client",
     "git-fix": "find .git/objects/ -type f -empty | xargs rm && git fetch -p && git fsck --full"
   },

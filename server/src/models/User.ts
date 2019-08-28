@@ -1,21 +1,24 @@
+import {User} from '../graphql/types'
 import bcrypt from 'bcryptjs'
-import { Schema, model, Model, Document } from 'mongoose'
+import {Document, Model, model, Schema} from 'mongoose'
 
 export const UserSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   username: { type: String, required: true },
   profileImg: String,
+  balance: {type: Number, required: true},
   id: { type: String, required: true },
   purchasedStocks: [
     {
       symbol: { type: String, required: true },
       name: { type: String, required: true },
       amount: { type: Number, required: true },
+      purchasePriceTotal: {type: Number, required: true},
       activity: [
         {
           date: { type: String, required: true },
-          purchase: { type: String, required: true }
+          purchase: {type: Number, required: true}
         }
       ]
     }
@@ -23,11 +26,11 @@ export const UserSchema = new Schema({
 })
 
 export const getUserByEmail = async (email: string) => {
-  return await UserModel.findOne({ email })
+  return UserModel.findOne({email})
 }
 
 export const getUserById = async (id: string) => {
-  return await UserModel.findOne({ id: id })
+  return UserModel.findOne({id: id})
 }
 
 export const comparePassword = async (
@@ -37,21 +40,7 @@ export const comparePassword = async (
   return await bcrypt.compare(candidatePassword, hash)
 }
 
-export interface UserProps {
-  email: string
-  password: string
-  username: string
-  profileImg?: string
-  id: string
-
-  balance: number
-  purchasedStocks: Array<{
-    symbol: string
-    amount: number
-    name: string
-    activity: Array<{ date: string; purchase: number }>
-  }>
-}
+export type UserProps = User
 
 export const UserModel: Model<Document & UserProps> = model(
   'User',

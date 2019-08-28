@@ -1,11 +1,10 @@
-import { TAction } from '../actions/types'
-import { Reducer, combineReducers } from 'redux'
-import { TState } from '../../types/state'
-import { ReducerCases } from '../actions/types'
-import { createReducer } from './createReducer'
-import { TOpenSnackbar } from '../actions/snackbar'
-import { defaultState } from '../defaultState'
-import { userReducer } from './auth'
+import {ReducerCases, TAction} from '../actions/types'
+import {combineReducers, Reducer} from 'redux'
+import {TState} from '../../types/state'
+import {createReducer} from './createReducer'
+import {TOpenSnackbar} from '../actions/snackbar'
+import {defaultState} from '../defaultState'
+import {userReducer} from './auth'
 
 const snackbarReducers: ReducerCases<TState['snackbar']> = {
   OPEN_SNACKBAR: (state, action: TOpenSnackbar) => {
@@ -13,7 +12,7 @@ const snackbarReducers: ReducerCases<TState['snackbar']> = {
     state.message = action.message
     state.variant = action.variant
   },
-  CLOSE_SNACKBAR: (state, action) => {
+  CLOSE_SNACKBAR: (state) => {
     state.open = false
   }
 }

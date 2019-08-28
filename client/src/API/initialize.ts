@@ -1,6 +1,6 @@
-import { UserFieldsFragment } from './../graphql/types'
-import { TState } from '../types/state'
-import { RTDispatch } from '../types/types'
+import {UserFieldsFragment} from '../graphql/types'
+import {TState} from '../types/state'
+import {RTDispatch} from '../types/types'
 import axios from 'axios'
 
 /**
@@ -25,6 +25,8 @@ export const fetchQuery = async <T = any>(
   return data.data
 }
 
+// noinspection JSUnusedLocalSymbols
 export const initializeAuthState = (user: UserFieldsFragment) => {
+  // noinspection JSUnusedLocalSymbols
   return (dispatch: RTDispatch, getState: () => TState) => {}
 }

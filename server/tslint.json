@@ -51,7 +51,6 @@
     "prefer-template": [true, "allow-single-concat"],
     "quotemark": [true, "single", "jsx-double", "avoid-escape"],
     "semicolon": [true, "never"],
-    "trailing-comma": [true, "ignore"],
     "triple-equals": [true, "allow-null-check"],
     "typedef": [true, "parameter", "property-declaration"],
     "variable-name": [
