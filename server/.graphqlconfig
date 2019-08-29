@@ -1,7 +1,7 @@
 {
   "projects": {
     "philibo": {
-      "schemaPath": "./server/src/graphql/schema.graphql",
+      "schemaPath": "src/graphql/schema.graphql",
       "includes": ["**/*.{graphql,ts,tsx}"],
       "extensions": {
         "endpoints": {

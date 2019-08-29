@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "philibo": {
+      "schemaPath": "../server/src/graphql/schema.graphql",
+      "includes": ["**/*.{graphql,ts,tsx}"],
+      "extensions": {
+        "endpoints": {
+          "dev": "http://localhost:4000/graphql"
+        }
+      }
+    }
+  }
+}

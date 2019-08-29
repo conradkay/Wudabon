@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import { userFields } from '../fragments'
 
+// language="GraphQL"
 export const GQL_LOGIN = gql`
   ${userFields}
   mutation login($email: String!, $password: String!) {
@@ -11,6 +12,8 @@ export const GQL_LOGIN = gql`
     }
   }
 `
+
+// language="GraphQL"
 export const GQL_REGISTER = gql`
   ${userFields}
   mutation register($username: String!, $password: String!, $email: String!) {
@@ -22,6 +25,7 @@ export const GQL_REGISTER = gql`
   }
 `
 
+// language="GraphQL"
 export const GQL_LOGIN_WITH_COOKIE = gql`
   ${userFields}
   mutation loginWithCookie {
@@ -33,6 +37,7 @@ export const GQL_LOGIN_WITH_COOKIE = gql`
   }
 `
 
+// language="GraphQL"
 export const GQL_LOGOUT = gql`
   mutation logout {
     logout {
