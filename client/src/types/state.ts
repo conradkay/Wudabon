@@ -3,9 +3,6 @@ export type TUser = {
   profileImg: string
   username: string
   email: string
-
-  balance: number
-  purchasedStocks: TPurchasedStock[]
 }
 
 export type TUsers = {
@@ -18,15 +15,6 @@ export type TSnackbar = {
   open: boolean
   message: string
   variant: TVariant
-}
-
-export type TPurchasedStock = {
-  purchasePrice: number
-  purchaseDate: string
-  symbol: string
-  name: string
-  amount: number
-  activity: Array<{date: string, purchase: number}>
 }
 
 export type TState = {

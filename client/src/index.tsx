@@ -23,7 +23,6 @@ import { loginA } from './store/actions/auth'
 import { Mutation } from './graphql/types'
 import { fetchQuery } from './API/initialize'
 
-
 const secondary = '#0336FF'
 const primary = '#00838f'
 // const primary = '#f4511e'
@@ -55,6 +54,7 @@ import { client } from './apollo'
 import { PublicOnlyRoute, PrivateRoute } from './components/utils/Routing'
 import { Settings } from './components/Settings/Settings'
 import { Dashboard } from './components/Dashboard/Dashboard'
+import { RecipeFinder } from './components/RecipeFinder/RecipeFinder'
 
 const Router = () => {
   const [open, setOpen] = useState(false)
@@ -110,6 +110,7 @@ const Router = () => {
               component={AuthRender}
               componentProps={{ authType: 'Login' }}
             />
+            <Route exact path="/recipes" component={RecipeFinder} />
             <PublicOnlyRoute
               exact
               path="/register"
