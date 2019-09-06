@@ -22,7 +22,13 @@ import {
   Tooltip
 } from '@material-ui/core'
 import { Trail } from 'react-spring/renderprops'
-import { HowToReg, PieChart, Help, Settings } from '@material-ui/icons'
+import {
+  HowToReg,
+  PieChart,
+  Help,
+  Settings,
+  Restaurant
+} from '@material-ui/icons'
 import { Link as NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { TState } from '../types/state'
@@ -56,7 +62,8 @@ const authItems = [
     label: 'Dashboard',
     pathname: '/dashboard',
     menuIcon: PieChart
-  }
+  },
+  { label: 'Recipes', pathname: '/recipes', menuIcon: Restaurant }
 ]
 
 const styles = (theme: Theme) =>

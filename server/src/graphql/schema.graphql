@@ -1,40 +1,13 @@
 type Query {
   user(id: String!): User
-  purchasedStocks: [PortfolioStock!]!
 }
 
-type StockActivity {
-  date: String!
-  purchase: Int! # positive or negative
-}
-
-type SimpleStock {
-  purchasePriceTotal: Float!
-  symbol: String!
-  name: String!
-  amount: Int!
-  activity: [StockActivity!]!
-}
-
-# comes from simpleStock when finding purchased in main menu
-type PortfolioStock {
-  price: Float! # updated before sending
-  symbol: String!
-  name: String!
-}
-
-type Boo {
-  output: String!
-}
 
 type User {
   id: String!
   profileImg: String
   username: String!
   email: String!
-  balance: Float!
-
-  purchasedStocks: [SimpleStock!]!
 }
 
 type Auth {
