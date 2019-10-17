@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {connect} from 'react-redux'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import {
   Avatar,
   Button,
@@ -12,15 +12,15 @@ import {
   withStyles,
   WithStyles
 } from '@material-ui/core'
-import {LockOpen} from '@material-ui/icons'
-import {formStyles} from '../styles/formStyles'
-import {openSnackbarA} from '../../store/actions/snackbar'
-import {Link} from 'react-router-dom'
+import { LockOpen } from '@material-ui/icons'
+import { formStyles } from '../styles/formStyles'
+import { openSnackbarA } from '../../store/actions/snackbar'
+import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet'
-import {loginA, registerA} from '../../store/actions/auth'
-import {Mutation, MutationResult} from 'react-apollo'
-import {LoginMutation, MutationResolvers, RegisterMutation} from '../../graphql/types'
-import {GQL_LOGIN, GQL_REGISTER} from '../../graphql/mutations/auth'
+import { loginA, registerA } from '../../store/actions/auth'
+import { Mutation, MutationResult } from 'react-apollo'
+import { LoginMutation, MutationResolvers, RegisterMutation } from '../../graphql/types'
+import { GQL_LOGIN, GQL_REGISTER } from '../../graphql/mutations/auth'
 
 type OwnProps = {
   authType: 'Register' | 'Login'
@@ -38,7 +38,7 @@ const Auth = ({ authType, openSnackbar, classes, register, login }: TProps) => {
       <Helmet>
         <style type="text/css">{` body { background-color: #1d364c; }`}</style>
         <meta
-          content="Get started with Philibo today, totally free!"
+          content="Get started with Wudabon today, totally free!"
           name={'description'}
         />
       </Helmet>
@@ -78,8 +78,8 @@ const Auth = ({ authType, openSnackbar, classes, register, login }: TProps) => {
             auth: (
               args: {
                 variables:
-                  | MutationResolvers.LoginArgs
-                  | MutationResolvers.RegisterArgs
+                | MutationResolvers.LoginArgs
+                | MutationResolvers.RegisterArgs
               }
             ) => any,
             result: MutationResult<LoginMutation & RegisterMutation>

@@ -12,8 +12,13 @@ export type Auth = {
   user: User
 }
 
-export type Boo = {
-  output: Scalars['String']
+export type DietPreferences = {
+  meat?: Maybe<Scalars['Boolean']>
+  dairy?: Maybe<Scalars['Boolean']>
+  eggs?: Maybe<Scalars['Boolean']>
+  lowSugar?: Maybe<Scalars['Boolean']>
+  lowCarb?: Maybe<Scalars['Boolean']>
+  lowFat?: Maybe<Scalars['Boolean']>
 }
 
 export type Mutation = {
@@ -21,7 +26,9 @@ export type Mutation = {
   login: Auth
   loginWithCookie: Auth
   logout: Void
-  buySellStock: Scalars['String']
+  createRecipe: Recipe
+  editRecipe: Recipe
+  deleteRecipe: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -35,37 +42,52 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 }
 
-export type MutationBuySellStockArgs = {
-  amount: Scalars['Int']
-  symbol: Scalars['String']
+export type NutritionInfo = {
+  calories: Scalars['Int']
+  totalFat?: Maybe<Scalars['Int']>
+  saturatedFat?: Maybe<Scalars['Int']>
+  cholesterol?: Maybe<Scalars['Int']>
+  sodium?: Maybe<Scalars['Int']>
+  carbs?: Maybe<Scalars['Int']>
+  dietaryFiber?: Maybe<Scalars['Int']>
+  protein?: Maybe<Scalars['Int']>
+  sugar?: Maybe<Scalars['Int']>
 }
 
-export type PortfolioStock = {
-  price: Scalars['Float']
-  symbol: Scalars['String']
-  name: Scalars['String']
+export type PrepInfo = {
+  prep: Scalars['Int']
+  cook: Scalars['Int']
+  readyIn: Scalars['Int']
+  servings: Scalars['Int']
 }
 
 export type Query = {
   user?: Maybe<User>
-  purchasedStocks: PortfolioStock[]
+  recipes: Array<Recipe>
 }
 
 export type QueryUserArgs = {
   id: Scalars['String']
 }
 
-export type SimpleStock = {
-  purchasePriceTotal: Scalars['Float']
-  symbol: Scalars['String']
+export type Recipe = {
+  authorId: Scalars['String']
+  reviews: Array<Review>
+  photos: Array<Scalars['String']>
   name: Scalars['String']
-  amount: Scalars['Int']
-  activity: StockActivity[]
+  description: Scalars['String']
+  groceryItemIds: Array<Scalars['String']>
+  nutritionInfo: NutritionInfo
+  prepInfo: PrepInfo
+  directions: Array<Scalars['String']>
 }
 
-export type StockActivity = {
+export type Review = {
+  stars: Scalars['Float']
+  description?: Maybe<Scalars['String']>
   date: Scalars['String']
-  purchase: Scalars['Int']
+  reviewerId: Scalars['String']
+  upvotes: Scalars['Int']
 }
 
 export type User = {
@@ -73,15 +95,14 @@ export type User = {
   profileImg?: Maybe<Scalars['String']>
   username: Scalars['String']
   email: Scalars['String']
-  balance: Scalars['Float']
-  purchasedStocks: SimpleStock[]
+  recipeIds: Array<Scalars['String']>
 }
 
 export type Void = {
   id: Scalars['String']
 }
 
-import {GraphQLResolveInfo} from 'graphql'
+import { GraphQLResolveInfo } from 'graphql'
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -157,16 +178,17 @@ export type ResolversTypes = {
   Query: {}
   String: Scalars['String']
   User: User
+  Recipe: Recipe
+  Review: Review
   Float: Scalars['Float']
-  SimpleStock: SimpleStock
   Int: Scalars['Int']
-  StockActivity: StockActivity
-  PortfolioStock: PortfolioStock
+  NutritionInfo: NutritionInfo
+  PrepInfo: PrepInfo
   Mutation: {}
   Auth: Auth
   Void: Void
   Boolean: Scalars['Boolean']
-  Boo: Boo
+  DietPreferences: DietPreferences
 }
 
 export type AuthResolvers<
@@ -176,11 +198,16 @@ export type AuthResolvers<
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
 }
 
-export type BooResolvers<
+export type DietPreferencesResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['Boo']
+  ParentType = ResolversTypes['DietPreferences']
 > = {
-  output?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  meat?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
+  dairy?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
+  eggs?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
+  lowSugar?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
+  lowCarb?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
+  lowFat?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
 }
 
 export type MutationResolvers<
@@ -201,18 +228,34 @@ export type MutationResolvers<
   >
   loginWithCookie?: Resolver<ResolversTypes['Auth'], ParentType, ContextType>
   logout?: Resolver<ResolversTypes['Void'], ParentType, ContextType>
-  buySellStock?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType,
-    MutationBuySellStockArgs>
+  createRecipe?: Resolver<ResolversTypes['Recipe'], ParentType, ContextType>
+  editRecipe?: Resolver<ResolversTypes['Recipe'], ParentType, ContextType>
+  deleteRecipe?: Resolver<ResolversTypes['String'], ParentType, ContextType>
 }
 
-export type PortfolioStockResolvers<ContextType = any,
-  ParentType = ResolversTypes['PortfolioStock']> = {
-  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
-  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+export type NutritionInfoResolvers<
+  ContextType = any,
+  ParentType = ResolversTypes['NutritionInfo']
+> = {
+  calories?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  totalFat?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  saturatedFat?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  cholesterol?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  sodium?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  carbs?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  dietaryFiber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  protein?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  sugar?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+}
+
+export type PrepInfoResolvers<
+  ContextType = any,
+  ParentType = ResolversTypes['PrepInfo']
+> = {
+  prep?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  cook?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  readyIn?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  servings?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
 }
 
 export type QueryResolvers<
@@ -225,35 +268,49 @@ export type QueryResolvers<
     ContextType,
     QueryUserArgs
   >
-  purchasedStocks?: Resolver<Array<ResolversTypes['PortfolioStock']>,
-    ParentType,
-    ContextType
-  >
+  recipes?: Resolver<Array<ResolversTypes['Recipe']>, ParentType, ContextType>
 }
 
-export type SimpleStockResolvers<
+export type RecipeResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['SimpleStock']
+  ParentType = ResolversTypes['Recipe']
 > = {
-  purchasePriceTotal?: Resolver<ResolversTypes['Float'],
-    ParentType,
-    ContextType>
-  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  authorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  reviews?: Resolver<Array<ResolversTypes['Review']>, ParentType, ContextType>
+  photos?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  activity?: Resolver<
-    Array<ResolversTypes['StockActivity']>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  groceryItemIds?: Resolver<
+    Array<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >
+  nutritionInfo?: Resolver<
+    ResolversTypes['NutritionInfo'],
+    ParentType,
+    ContextType
+  >
+  prepInfo?: Resolver<ResolversTypes['PrepInfo'], ParentType, ContextType>
+  directions?: Resolver<
+    Array<ResolversTypes['String']>,
     ParentType,
     ContextType
   >
 }
 
-export type StockActivityResolvers<
+export type ReviewResolvers<
   ContextType = any,
-  ParentType = ResolversTypes['StockActivity']
+  ParentType = ResolversTypes['Review']
 > = {
+  stars?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  description?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >
   date?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  purchase?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  reviewerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  upvotes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
 }
 
 export type UserResolvers<
@@ -268,10 +325,7 @@ export type UserResolvers<
   >
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  balance?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
-  purchasedStocks?: Resolver<Array<ResolversTypes['SimpleStock']>,
-    ParentType,
-    ContextType>
+  recipeIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>
 }
 
 export type VoidResolvers<
@@ -283,12 +337,13 @@ export type VoidResolvers<
 
 export type Resolvers<ContextType = any> = {
   Auth?: AuthResolvers<ContextType>
-  Boo?: BooResolvers<ContextType>
+  DietPreferences?: DietPreferencesResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
-  PortfolioStock?: PortfolioStockResolvers<ContextType>
+  NutritionInfo?: NutritionInfoResolvers<ContextType>
+  PrepInfo?: PrepInfoResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
-  SimpleStock?: SimpleStockResolvers<ContextType>
-  StockActivity?: StockActivityResolvers<ContextType>
+  Recipe?: RecipeResolvers<ContextType>
+  Review?: ReviewResolvers<ContextType>
   User?: UserResolvers<ContextType>
   Void?: VoidResolvers<ContextType>
 }

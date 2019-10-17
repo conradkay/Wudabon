@@ -1,5 +1,4 @@
 /* tslint:disable */
-/* noinspection */
 export type Maybe<T> = T | null
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -16,9 +15,14 @@ export type Auth = {
   user: User
 }
 
-export type Boo = {
-  __typename?: 'Boo'
-  output: Scalars['String']
+export type DietPreferences = {
+  __typename?: 'DietPreferences'
+  meat?: Maybe<Scalars['Boolean']>
+  dairy?: Maybe<Scalars['Boolean']>
+  eggs?: Maybe<Scalars['Boolean']>
+  lowSugar?: Maybe<Scalars['Boolean']>
+  lowCarb?: Maybe<Scalars['Boolean']>
+  lowFat?: Maybe<Scalars['Boolean']>
 }
 
 export type Mutation = {
@@ -27,7 +31,9 @@ export type Mutation = {
   login: Auth
   loginWithCookie: Auth
   logout: Void
-  buySellStock: Scalars['String']
+  createRecipe: Recipe
+  editRecipe: Recipe
+  deleteRecipe: Scalars['String']
 }
 
 export type MutationRegisterArgs = {
@@ -41,41 +47,57 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 }
 
-export type MutationBuySellStockArgs = {
-  amount: Scalars['Int']
-  symbol: Scalars['String']
+export type NutritionInfo = {
+  __typename?: 'NutritionInfo'
+  calories: Scalars['Int']
+  totalFat?: Maybe<Scalars['Int']>
+  saturatedFat?: Maybe<Scalars['Int']>
+  cholesterol?: Maybe<Scalars['Int']>
+  sodium?: Maybe<Scalars['Int']>
+  carbs?: Maybe<Scalars['Int']>
+  dietaryFiber?: Maybe<Scalars['Int']>
+  protein?: Maybe<Scalars['Int']>
+  sugar?: Maybe<Scalars['Int']>
 }
 
-export type PortfolioStock = {
-  __typename?: 'PortfolioStock'
-  price: Scalars['Float']
-  symbol: Scalars['String']
-  name: Scalars['String']
+export type PrepInfo = {
+  __typename?: 'PrepInfo'
+  prep: Scalars['Int']
+  cook: Scalars['Int']
+  readyIn: Scalars['Int']
+  servings: Scalars['Int']
 }
 
 export type Query = {
   __typename?: 'Query'
   user?: Maybe<User>
-  purchasedStocks: Array<PortfolioStock>
+  recipes: Array<Recipe>
 }
 
 export type QueryUserArgs = {
   id: Scalars['String']
 }
 
-export type SimpleStock = {
-  __typename?: 'SimpleStock'
-  purchasePriceTotal: Scalars['Float']
-  symbol: Scalars['String']
+export type Recipe = {
+  __typename?: 'Recipe'
+  authorId: Scalars['String']
+  reviews: Array<Review>
+  photos: Array<Scalars['String']>
   name: Scalars['String']
-  amount: Scalars['Int']
-  activity: Array<StockActivity>
+  description: Scalars['String']
+  groceryItemIds: Array<Scalars['String']>
+  nutritionInfo: NutritionInfo
+  prepInfo: PrepInfo
+  directions: Array<Scalars['String']>
 }
 
-export type StockActivity = {
-  __typename?: 'StockActivity'
+export type Review = {
+  __typename?: 'Review'
+  stars: Scalars['Float']
+  description?: Maybe<Scalars['String']>
   date: Scalars['String']
-  purchase: Scalars['Int']
+  reviewerId: Scalars['String']
+  upvotes: Scalars['Int']
 }
 
 export type User = {
@@ -84,15 +106,14 @@ export type User = {
   profileImg?: Maybe<Scalars['String']>
   username: Scalars['String']
   email: Scalars['String']
-  balance: Scalars['Float']
-  purchasedStocks: Array<SimpleStock>
+  recipeIds: Array<Scalars['String']>
 }
 
 export type Void = {
   __typename?: 'Void'
   id: Scalars['String']
 }
-import {GraphQLResolveInfo} from 'graphql'
+import { GraphQLResolveInfo } from 'graphql'
 
 export type Resolver<Result, Parent = {}, TContext = {}, Args = {}> = (
   parent: Parent,
@@ -147,10 +168,7 @@ export namespace QueryResolvers {
   export interface Resolvers<TContext = {}, TypeParent = {}> {
     user?: UserResolver<Maybe<User>, TypeParent, TContext>
 
-    purchasedStocks?: PurchasedStocksResolver<PortfolioStock[],
-      TypeParent,
-      TContext
-    >
+    recipes?: RecipesResolver<Recipe[], TypeParent, TContext>
   }
 
   export type UserResolver<
@@ -162,7 +180,8 @@ export namespace QueryResolvers {
     id: string
   }
 
-  export type PurchasedStocksResolver<R = PortfolioStock[],
+  export type RecipesResolver<
+    R = Recipe[],
     Parent = {},
     TContext = {}
   > = Resolver<R, Parent, TContext>
@@ -178,11 +197,7 @@ export namespace UserResolvers {
 
     email?: EmailResolver<string, TypeParent, TContext>
 
-    balance?: BalanceResolver<number, TypeParent, TContext>
-
-    purchasedStocks?: PurchasedStocksResolver<SimpleStock[],
-      TypeParent,
-      TContext>
+    recipeIds?: RecipeIdsResolver<string[], TypeParent, TContext>
   }
 
   export type IdResolver<R = string, Parent = User, TContext = {}> = Resolver<
@@ -205,93 +220,220 @@ export namespace UserResolvers {
     Parent = User,
     TContext = {}
   > = Resolver<R, Parent, TContext>
-  export type BalanceResolver<R = number,
+  export type RecipeIdsResolver<
+    R = string[],
     Parent = User,
-    TContext = {}> = Resolver<R, Parent, TContext>
-  export type PurchasedStocksResolver<R = SimpleStock[],
-    Parent = User,
-    TContext = {}> = Resolver<R, Parent, TContext>
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
 }
 
-export namespace SimpleStockResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = SimpleStock> {
-    purchasePriceTotal?: PurchasePriceTotalResolver<number,
-      TypeParent,
-      TContext>
+export namespace RecipeResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = Recipe> {
+    authorId?: AuthorIdResolver<string, TypeParent, TContext>
 
-    symbol?: SymbolResolver<string, TypeParent, TContext>
+    reviews?: ReviewsResolver<Review[], TypeParent, TContext>
+
+    photos?: PhotosResolver<string[], TypeParent, TContext>
 
     name?: NameResolver<string, TypeParent, TContext>
 
-    amount?: AmountResolver<number, TypeParent, TContext>
+    description?: DescriptionResolver<string, TypeParent, TContext>
 
-    activity?: ActivityResolver<StockActivity[], TypeParent, TContext>
+    groceryItemIds?: GroceryItemIdsResolver<string[], TypeParent, TContext>
+
+    nutritionInfo?: NutritionInfoResolver<NutritionInfo, TypeParent, TContext>
+
+    prepInfo?: PrepInfoResolver<PrepInfo, TypeParent, TContext>
+
+    directions?: DirectionsResolver<string[], TypeParent, TContext>
   }
 
-  export type PurchasePriceTotalResolver<
-    R = number,
-    Parent = SimpleStock,
+  export type AuthorIdResolver<
+    R = string,
+    Parent = Recipe,
     TContext = {}
   > = Resolver<R, Parent, TContext>
-  export type SymbolResolver<
-    R = string,
-    Parent = SimpleStock,
+  export type ReviewsResolver<
+    R = Review[],
+    Parent = Recipe,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type PhotosResolver<
+    R = string[],
+    Parent = Recipe,
     TContext = {}
   > = Resolver<R, Parent, TContext>
   export type NameResolver<
     R = string,
-    Parent = SimpleStock,
+    Parent = Recipe,
     TContext = {}
   > = Resolver<R, Parent, TContext>
-  export type AmountResolver<
-    R = number,
-    Parent = SimpleStock,
+  export type DescriptionResolver<
+    R = string,
+    Parent = Recipe,
     TContext = {}
   > = Resolver<R, Parent, TContext>
-  export type ActivityResolver<
-    R = StockActivity[],
-    Parent = SimpleStock,
+  export type GroceryItemIdsResolver<
+    R = string[],
+    Parent = Recipe,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type NutritionInfoResolver<
+    R = NutritionInfo,
+    Parent = Recipe,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type PrepInfoResolver<
+    R = PrepInfo,
+    Parent = Recipe,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type DirectionsResolver<
+    R = string[],
+    Parent = Recipe,
     TContext = {}
   > = Resolver<R, Parent, TContext>
 }
 
-export namespace StockActivityResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = StockActivity> {
+export namespace ReviewResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = Review> {
+    stars?: StarsResolver<number, TypeParent, TContext>
+
+    description?: DescriptionResolver<Maybe<string>, TypeParent, TContext>
+
     date?: DateResolver<string, TypeParent, TContext>
 
-    purchase?: PurchaseResolver<number, TypeParent, TContext>
+    reviewerId?: ReviewerIdResolver<string, TypeParent, TContext>
+
+    upvotes?: UpvotesResolver<number, TypeParent, TContext>
   }
 
-  export type DateResolver<
-    R = string,
-    Parent = StockActivity,
+  export type StarsResolver<
+    R = number,
+    Parent = Review,
     TContext = {}
   > = Resolver<R, Parent, TContext>
-  export type PurchaseResolver<
+  export type DescriptionResolver<
+    R = Maybe<string>,
+    Parent = Review,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type DateResolver<
+    R = string,
+    Parent = Review,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type ReviewerIdResolver<
+    R = string,
+    Parent = Review,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type UpvotesResolver<
     R = number,
-    Parent = StockActivity,
+    Parent = Review,
     TContext = {}
   > = Resolver<R, Parent, TContext>
 }
 
-export namespace PortfolioStockResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = PortfolioStock> {
-    price?: PriceResolver<number, TypeParent, TContext>
+export namespace NutritionInfoResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = NutritionInfo> {
+    calories?: CaloriesResolver<number, TypeParent, TContext>
 
-    symbol?: SymbolResolver<string, TypeParent, TContext>
+    totalFat?: TotalFatResolver<Maybe<number>, TypeParent, TContext>
 
-    name?: NameResolver<string, TypeParent, TContext>
+    saturatedFat?: SaturatedFatResolver<Maybe<number>, TypeParent, TContext>
+
+    cholesterol?: CholesterolResolver<Maybe<number>, TypeParent, TContext>
+
+    sodium?: SodiumResolver<Maybe<number>, TypeParent, TContext>
+
+    carbs?: CarbsResolver<Maybe<number>, TypeParent, TContext>
+
+    dietaryFiber?: DietaryFiberResolver<Maybe<number>, TypeParent, TContext>
+
+    protein?: ProteinResolver<Maybe<number>, TypeParent, TContext>
+
+    sugar?: SugarResolver<Maybe<number>, TypeParent, TContext>
   }
 
-  export type PriceResolver<R = number,
-    Parent = PortfolioStock,
-    TContext = {}> = Resolver<R, Parent, TContext>
-  export type SymbolResolver<R = string,
-    Parent = PortfolioStock,
-    TContext = {}> = Resolver<R, Parent, TContext>
-  export type NameResolver<R = string,
-    Parent = PortfolioStock,
-    TContext = {}> = Resolver<R, Parent, TContext>
+  export type CaloriesResolver<
+    R = number,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type TotalFatResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type SaturatedFatResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type CholesterolResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type SodiumResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type CarbsResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type DietaryFiberResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type ProteinResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type SugarResolver<
+    R = Maybe<number>,
+    Parent = NutritionInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+}
+
+export namespace PrepInfoResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = PrepInfo> {
+    prep?: PrepResolver<number, TypeParent, TContext>
+
+    cook?: CookResolver<number, TypeParent, TContext>
+
+    readyIn?: ReadyInResolver<number, TypeParent, TContext>
+
+    servings?: ServingsResolver<number, TypeParent, TContext>
+  }
+
+  export type PrepResolver<
+    R = number,
+    Parent = PrepInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type CookResolver<
+    R = number,
+    Parent = PrepInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type ReadyInResolver<
+    R = number,
+    Parent = PrepInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type ServingsResolver<
+    R = number,
+    Parent = PrepInfo,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
 }
 
 export namespace MutationResolvers {
@@ -304,7 +446,11 @@ export namespace MutationResolvers {
 
     logout?: LogoutResolver<Void, TypeParent, TContext>
 
-    buySellStock?: BuySellStockResolver<string, TypeParent, TContext>
+    createRecipe?: CreateRecipeResolver<Recipe, TypeParent, TContext>
+
+    editRecipe?: EditRecipeResolver<Recipe, TypeParent, TContext>
+
+    deleteRecipe?: DeleteRecipeResolver<string, TypeParent, TContext>
   }
 
   export type RegisterResolver<R = Auth, Parent = {}, TContext = {}> = Resolver<
@@ -343,16 +489,21 @@ export namespace MutationResolvers {
     Parent,
     TContext
   >
-  export type BuySellStockResolver<
+  export type CreateRecipeResolver<
+    R = Recipe,
+    Parent = {},
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type EditRecipeResolver<
+    R = Recipe,
+    Parent = {},
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type DeleteRecipeResolver<
     R = string,
     Parent = {},
-    TContext = {}> = Resolver<R, Parent, TContext, BuySellStockArgs>
-
-  export interface BuySellStockArgs {
-    amount: number
-
-    symbol: string
-  }
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
 }
 
 export namespace AuthResolvers {
@@ -379,14 +530,49 @@ export namespace VoidResolvers {
   >
 }
 
-export namespace BooResolvers {
-  export interface Resolvers<TContext = {}, TypeParent = Boo> {
-    output?: OutputResolver<string, TypeParent, TContext>
+export namespace DietPreferencesResolvers {
+  export interface Resolvers<TContext = {}, TypeParent = DietPreferences> {
+    meat?: MeatResolver<Maybe<boolean>, TypeParent, TContext>
+
+    dairy?: DairyResolver<Maybe<boolean>, TypeParent, TContext>
+
+    eggs?: EggsResolver<Maybe<boolean>, TypeParent, TContext>
+
+    lowSugar?: LowSugarResolver<Maybe<boolean>, TypeParent, TContext>
+
+    lowCarb?: LowCarbResolver<Maybe<boolean>, TypeParent, TContext>
+
+    lowFat?: LowFatResolver<Maybe<boolean>, TypeParent, TContext>
   }
 
-  export type OutputResolver<
-    R = string,
-    Parent = Boo,
+  export type MeatResolver<
+    R = Maybe<boolean>,
+    Parent = DietPreferences,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type DairyResolver<
+    R = Maybe<boolean>,
+    Parent = DietPreferences,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type EggsResolver<
+    R = Maybe<boolean>,
+    Parent = DietPreferences,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type LowSugarResolver<
+    R = Maybe<boolean>,
+    Parent = DietPreferences,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type LowCarbResolver<
+    R = Maybe<boolean>,
+    Parent = DietPreferences,
+    TContext = {}
+  > = Resolver<R, Parent, TContext>
+  export type LowFatResolver<
+    R = Maybe<boolean>,
+    Parent = DietPreferences,
     TContext = {}
   > = Resolver<R, Parent, TContext>
 }
@@ -427,13 +613,14 @@ export interface DeprecatedDirectiveArgs {
 export type IResolvers<TContext = {}> = {
   Query?: QueryResolvers.Resolvers<TContext>
   User?: UserResolvers.Resolvers<TContext>
-  SimpleStock?: SimpleStockResolvers.Resolvers<TContext>
-  StockActivity?: StockActivityResolvers.Resolvers<TContext>
-  PortfolioStock?: PortfolioStockResolvers.Resolvers<TContext>
+  Recipe?: RecipeResolvers.Resolvers<TContext>
+  Review?: ReviewResolvers.Resolvers<TContext>
+  NutritionInfo?: NutritionInfoResolvers.Resolvers<TContext>
+  PrepInfo?: PrepInfoResolvers.Resolvers<TContext>
   Mutation?: MutationResolvers.Resolvers<TContext>
   Auth?: AuthResolvers.Resolvers<TContext>
   Void?: VoidResolvers.Resolvers<TContext>
-  Boo?: BooResolvers.Resolvers<TContext>
+  DietPreferences?: DietPreferencesResolvers.Resolvers<TContext>
 } & { [typeName: string]: never }
 
 export type IDirectiveResolvers<Result> = {

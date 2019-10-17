@@ -147,7 +147,7 @@ const Topbar = (props: TProps) => {
                       <Tooltip title="Data provided by IEX Cloud (https://iexcloud.io)">
                         <a
                           target="_blank"
-                          href="https://github.com/conradkay/Philibo"
+                          href="https://github.com/conradkay/Wudabon"
                           style={{
                             ...trailProps,
                             color: 'black',
@@ -156,7 +156,7 @@ const Topbar = (props: TProps) => {
                           }}
                           className={classes.tagline}
                         >
-                          Philibo
+                          Wudabon
                         </a>
                       </Tooltip>
                     )}

@@ -1,10 +1,10 @@
 type Query {
   user(id: String!): User
-  recipes(): [Recipe!]!
+  recipes: [Recipe!]!
 }
 
 type Review {
-  stars: Int! # should this just be 1-10?
+  stars: Float! # should this just be 1-10?
   description: String # can be just a star review
   date: String!
   reviewerId: String!
@@ -41,14 +41,12 @@ type Recipe {
   description: String!
 
   groceryItemIds: [String!]! # how will we implement this, a search? will string represent ingredient id?
-
   nutritionInfo: NutritionInfo!
 
   prepInfo: PrepInfo!
 
   directions: [String!]!
 }
-
 
 type DietPreferences {
   meat: Boolean
@@ -82,4 +80,7 @@ type Mutation {
   login(email: String!, password: String!): Auth!
   loginWithCookie: Auth!
   logout: Void!
+  createRecipe: Recipe!
+  editRecipe: Recipe!
+  deleteRecipe: String!   
 }

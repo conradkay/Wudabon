@@ -1,6 +1,6 @@
 {
   "projects": {
-    "philibo": {
+    "wudabon": {
       "schemaPath": "../server/src/graphql/schema.graphql",
       "includes": ["**/*.{graphql,ts,tsx}"],
       "extensions": {
