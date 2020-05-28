@@ -33,12 +33,6 @@
     "skipDefaultLibCheck": true,
     "isolatedModules": true
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "webpack",
-    "src/graphql/types.ts"
-  ],
+  "exclude": ["node_modules", "build", "scripts", "webpack"],
   "include": ["src", "../server/src/__tests__"]
 }

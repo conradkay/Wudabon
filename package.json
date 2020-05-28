@@ -1,7 +1,7 @@
 {
   "name": "kanbanbrawn-master",
   "version": "1.0.0",
-  "description": "Bugs: Editing a created task to have more points doesn't increase your current points Proposals:",
+  "description": "This do be pretty lit do",
   "main": "./server/src/index.ts",
   "scripts": {
     "start": "cd server && npm i && nodemon",
@@ -9,7 +9,6 @@
     "build": "npm i --prefix server && cd client && npm install && npm run build",
     "client": "npm start --prefix client",
     "dev": "concurrently --kill-others-on-fail  \"npm run server\" \"npm run client\" ",
-    "gen": "npm run graphql-gen --prefix server && npm run graphql-gen --prefix client",
     "git-fix": "find .git/objects/ -type f -empty | xargs rm && git fetch -p && git fsck --full"
   },
   "engines": {
@@ -27,11 +26,9 @@
   },
   "homepage": "https://phillibo.herokuapp.com",
   "dependencies": {
-    "@playlyfe/gql": "^2.6.1",
     "@types/node": "^12.6.9",
     "concurrently": "^4.1.0",
     "copyfiles": "^2.1.0",
-    "iexcloud_api_wrapper": "^1.1.5",
     "nodemon": "^1.19.1",
     "react-scripts": "^2.1.8",
     "typescript": "^3.5.3"
