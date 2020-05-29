@@ -1,13 +1,12 @@
-import express, { Express, Request } from 'express'
+import express, { Express } from 'express'
 import * as bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
-import { gqlServer } from './graphql/graphql'
 const morgan = require('morgan')
 import path from 'path'
 import jwt from 'express-jwt'
 import cors from 'cors'
-import router from './routes/routes'
+import { router } from './routes/routes'
 
 require('dotenv').config()
 const app: Express = express()
@@ -21,21 +20,14 @@ app.use(
   })
 )
 
-morgan.token('graphql-query', (req: Request) => {
-  const { variables } = req.body
-
-  return `GRAPHQL ${
-    Object.keys(variables || {}).length
-      ? `Variables: ${JSON.stringify(variables)}`
-      : ''
-  }`
-})
-app.use(morgan(':method :status :response-time ms :graphql-query'))
+app.use(morgan(':method :status :response-time ms'))
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 mongoose.connect(process.env.DB_CONNECT || '', { useNewUrlParser: true })
+
+mongoose.set('useUnifiedTopology', true)
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
@@ -53,12 +45,6 @@ const auth = jwt({
 
 app.use(auth)
 app.use(router)
-
-gqlServer.applyMiddleware({
-  app,
-  path: '/graphql',
-  cors: false
-})
 
 app.use(express.static(path.join(__dirname, '/../../client/build')))
 

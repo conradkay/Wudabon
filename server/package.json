@@ -19,8 +19,7 @@
   },
   "scripts": {
     "start": "nodemon",
-    "fix": "tslint --fix -c ./tslint.json 'src/**/*{.ts,.tsx}'",
-    "graphql-gen": "graphql-codegen --config config.yml"
+    "fix": "tslint --fix -c ./tslint.json 'src/**/*{.ts,.tsx}'"
   },
   "author": "Conrad Kay",
   "license": "ISC",
@@ -47,7 +46,7 @@
     "express-session": "^1.16.1",
     "jest": "^24.8.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.5.3",
+    "mongoose": "^5.9.16",
     "morgan": "^1.9.1",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.18.11",

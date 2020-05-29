@@ -1,3 +1,1 @@
-import { getUser } from './routes'
-
-export type GetUserReturn = ReturnType<typeof getUser>
+export type Nice = string // boilerplate, Nice

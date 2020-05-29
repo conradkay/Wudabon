@@ -1,0 +1,10 @@
+- /recipe
+  - /
+  - /create 
+  - /delete
+  - /edit
+- /user
+  - / 
+  - login
+  - register
+  - logout
