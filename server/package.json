@@ -42,7 +42,7 @@
     "debug": "^4.1.0",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "express-session": "^1.16.1",
     "jest": "^24.8.0",
     "jsonwebtoken": "^8.5.1",
